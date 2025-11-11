@@ -1,0 +1,84 @@
+version: '3.8'
+
+# 🚀 CONFIGURACIÓN MINIMAL - Optimizada para evitar rate limits
+# Solo incluye MySQL + API (sin Adminer)
+# Para usar Adminer: cp docker-compose.full.yml docker-compose.yml
+
+services:
+  # Base de datos MySQL
+  mysql-db:
+    image: mysql:8.0
+    container_name: panaderia-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-PanaderiaRoot2024!}
+      MYSQL_DATABASE: panaderia_db
+      MYSQL_USER: panaderia_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-PanaderiaUser2024!}
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - panaderia-network
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-buffer-pool-size=256M
+      - --max-connections=100
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-PanaderiaRoot2024!}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Aplicación Spring Boot
+  panaderia-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: panaderia-app
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      DB_USERNAME: panaderia_user
+      DB_PASSWORD: ${MYSQL_PASSWORD:-PanaderiaUser2024!}
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}"
+      JAVA_OPTS: "-Xmx512m -Xms256m -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    networks:
+      - panaderia-network
+    volumes:
+      - app_logs:/app/logs
+      - uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/productos/test || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+# Volúmenes persistentes
+volumes:
+  mysql_data:
+    driver: local
+  app_logs:
+    driver: local
+  uploads:
+    driver: local
+
+# Red personalizada
+networks:
+  panaderia-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

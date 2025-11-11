@@ -1,0 +1,65 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Spring Boot
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production.local
+
+# Build artifacts
+*.jar
+*.war
+*.nar
+
+# Docker
+.dockerignore
+
+# Deployment
+deploy-temp/
+*.zip
+*-deploy.*
+
+# Test results
+TEST-*.xml
+target/surefire-reports/
+
+# Coverage reports
+target/site/jacoco/
+
+# Temporary files
+*~
+*.swp
+*.swo
+.tmp/
+temp/
+
+# Application logs
+logs/
+*.log
+application.log
+
+# Database
+*.db
+*.sqlite
