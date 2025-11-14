@@ -27,14 +27,15 @@ cp mvnw.cmd deploy-temp/ 2>/dev/null || echo "mvnw.cmd no encontrado"
 # 2. Crear archivo de despliegue
 cat > deploy-temp/deploy.sh << 'EOF'
 #!/bin/bash
-echo "🔧 Configurando aplicación en VPS..."
+echo "🔧 Actualizando aplicación en VPS (preservando datos)..."
 
-# Detener contenedores existentes
-docker-compose down --remove-orphans 2>/dev/null || true
+# Detener solo los contenedores SIN eliminar volúmenes (preservar datos)
+docker-compose stop 2>/dev/null || true
 
-# Limpiar imágenes anteriores
+# Limpiar solo imágenes no utilizadas (NO volúmenes)
 docker image prune -f
-docker volume prune -f
+
+echo "💾 Volúmenes de datos preservados..."
 
 # Construir y ejecutar
 echo "🏗️ Construyendo aplicación..."
@@ -51,10 +52,22 @@ echo "📊 Estado de los contenedores:"
 docker-compose ps
 
 echo "🧪 Probando conectividad:"
-curl -f http://localhost:8080/api/productos/test || echo "❌ API no responde"
-
-echo "✅ Despliegue completado!"
-echo "🌐 API disponible en: http://$(curl -s ifconfig.me):8080"
+if curl -f http://localhost:8080/api/productos/test 2>/dev/null; then
+    echo "✅ API responde correctamente"
+    echo "✅ Despliegue completado exitosamente!"
+    echo "🌐 API disponible en: http://$(curl -s ifconfig.me):8080"
+else
+    echo "❌ API no responde - revisando problema..."
+    echo ""
+    echo "📊 Estado actual de contenedores:"
+    docker-compose ps
+    echo ""
+    echo "⚠️ PROBLEMA DETECTADO. Opciones para solucionarlo:"
+    echo "1. Ejecutar diagnóstico: chmod +x diagnostico.sh && ./diagnostico.sh"
+    echo "2. Solución automática: chmod +x solucion-rapida.sh && ./solucion-rapida.sh"
+    echo "3. Ver logs detallados: docker-compose logs api"
+    echo "4. Reinicio completo: docker-compose down && docker-compose up -d"
+fi
 EOF
 
 chmod +x deploy-temp/deploy.sh

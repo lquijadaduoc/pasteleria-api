@@ -1,17 +1,27 @@
 # 🍰 Panadería API - Sistema Completo de Gestión
 
-API REST completa para panadería con autenticación, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos.
+API REST completa para panadería con autenticación, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos. **Actualizado con soporte para pedidos anónimos y herramientas de diagnóstico automático.**
 
 ## 📑 Documentación
 
 - **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Documentación completa de todos los endpoints
-- **[README.md](README.md)** - Información general, instalación y despliegue
+- **[GUIA_DESPLIEGUE.md](GUIA_DESPLIEGUE.md)** - Guía completa de despliegue y preservación de datos
+- **[CORRECCION_USER_ID.md](CORRECCION_USER_ID.md)** - Corrección del error user_id NULL
 
 ## 🔗 Enlaces Rápidos
 
 - **API en Producción**: http://168.197.50.14:8080
 - **Repositorio**: https://github.com/lquijadaduoc/pasteleria-api
 - **Test de Conectividad**: http://168.197.50.14:8080/api/productos/test
+- **Productos Disponibles**: http://168.197.50.14:8080/api/productos
+
+## 🆕 Últimas Actualizaciones (Noviembre 2025)
+
+- ✅ **Pedidos Anónimos**: Soporte completo para pedidos sin usuario registrado
+- ✅ **Preservación de Datos**: Despliegues que no eliminan datos existentes  
+- ✅ **Diagnóstico Automático**: Scripts inteligentes para resolver problemas
+- ✅ **Base de Datos Robusta**: DDL completo con datos iniciales
+- ✅ **Healthcheck Mejorado**: Mejor detección de problemas de arranque
 
 ## ✨ Características Principales
 
@@ -28,12 +38,19 @@ API REST completa para panadería con autenticación, catálogo extenso, sistema
 - **16 productos predefinidos** según especificaciones
 
 ### 📦 **Gestión de Pedidos**
-- **Pedidos sin registro**: Permite crear pedidos sin necesidad de que el usuario esté registrado
+- **✨ Pedidos Anónimos**: Crear pedidos sin registro de usuario
+- **✨ Pedidos con Usuario**: Acceso a descuentos y beneficios especiales
 - Seguimiento completo desde preparación hasta entrega
 - Generación automática de boletas
 - Notificaciones de estado
 - Selección de fechas de entrega
-- Descuentos y beneficios automáticos solo para usuarios registrados
+- Sistema inteligente de descuentos automáticos
+
+### 🛠️ **DevOps y Despliegue**
+- **Despliegue Preservando Datos**: Scripts que no eliminan información existente
+- **Diagnóstico Automático**: Detección y solución inteligente de problemas
+- **Healthcheck Robusto**: Monitoreo de salud de contenedores
+- **Scripts de Solución**: Herramientas para resolver problemas comunes
 
 ## 🚀 Inicio Rápido
 
@@ -181,9 +198,10 @@ Invoke-RestMethod -Uri "http://localhost:8080/api/productos/forma/CIRCULAR" | Co
 
 **La API está actualmente desplegada y funcionando:**
 - **URL de la API**: http://168.197.50.14:8080
-- **Estado**: ✅ Operativo
-- **Base de datos**: MySQL configurada y corriendo
-- **Última actualización**: 2025-11-11
+- **Estado**: ✅ Operativo con todas las correcciones aplicadas
+- **Base de datos**: MySQL configurada con soporte para pedidos anónimos
+- **Última actualización**: 2025-11-14
+- **Características**: ✅ Pedidos anónimos | ✅ Preservación de datos | ✅ Diagnóstico automático
 
 ### Endpoints en Producción
 
@@ -213,20 +231,35 @@ ALLOWED_ORIGINS=https://tu-dominio.com,https://tu-frontend.com
 ADMINER_PORT=8081
 ```
 
-### Comandos de Despliegue
+### 🚀 Comandos de Despliegue Actualizados
 
+#### **Despliegue Preservando Datos (Recomendado)**
 ```bash
-# 1. Subir archivos al VPS
-scp -r . usuario@168.197.50.14:/ruta/panaderia-api/
+# 1. Generar paquete de despliegue
+.\deploy-to-vps.bat  # Windows
+# o
+./deploy-to-vps.sh   # Linux/Mac
 
-# 2. Conectar al VPS
-ssh usuario@168.197.50.14
+# 2. Subir al VPS
+scp panaderia-api-deploy.zip root@168.197.50.14:/root/
 
-# 3. Navegar al directorio
-cd /ruta/panaderia-api/
+# 3. Desplegar preservando datos existentes
+ssh root@168.197.50.14
+cd /root && unzip -o panaderia-api-deploy.zip
+./deploy.sh
+```
 
-# 4. Construir y desplegar
-docker-compose up --build -d
+#### **Solución Automática de Problemas**
+```bash
+# Si hay problemas después del despliegue
+./solucion-rapida.sh      # Solución automática
+./diagnostico.sh          # Diagnóstico completo
+```
+
+#### **Despliegue Limpio (Solo si es necesario)**
+```bash
+# ⚠️ BORRA TODOS LOS DATOS
+./deploy-clean.sh
 ```
 
 ### Configuración de Firewall

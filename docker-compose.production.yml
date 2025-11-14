@@ -13,6 +13,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -36,8 +37,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/productos/test"]
       interval: 30s
-      timeout: 10s
-      retries: 3
+      timeout: 15s
+      retries: 8
+      start_period: 120s
 
 volumes:
   mysql_data:

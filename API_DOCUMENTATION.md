@@ -2,9 +2,19 @@
 
 Esta documentación contiene TODOS los endpoints implementados en la API de la panadería, organizados por controlador.
 
+**🆕 Última actualización:** Noviembre 14, 2025 - Incluye soporte para pedidos anónimos y correcciones de estabilidad.
+
 ## 🏗️ Base URL
 - **Desarrollo Local**: `http://localhost:8080`
-- **Producción (VPS)**: `http://168.197.50.14:8080`
+- **Producción (VPS)**: `http://168.197.50.14:8080` ✅ **Operativo**
+
+## 🎯 Características Destacadas
+
+- ✅ **Pedidos Anónimos**: Crear pedidos sin necesidad de registro
+- ✅ **Descuentos Automáticos**: Para usuarios registrados (50+ años, código FELICES50)
+- ✅ **Tortas Gratis**: Para estudiantes Duoc (@duoc.cl) en cumpleaños
+- ✅ **Catálogo Completo**: 16+ productos con personalización
+- ✅ **Sistema Robusto**: Con diagnóstico automático y preservación de datos
 
 ---
 
@@ -227,6 +237,46 @@ GET /api/pedidos/usuario/{email}
 
 GET /api/pedidos/cliente/{email}
 # Pedidos como cliente (alias de usuario)
+```
+
+### 🌟 Ejemplos de Pedidos
+
+#### **Pedido Anónimo (Sin Usuario Registrado)**
+```bash
+curl -X POST http://168.197.50.14:8080/api/pedidos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "emailUsuario": "cliente@gmail.com",
+    "observaciones": "Pedido para cumpleaños",
+    "items": [
+      {
+        "productId": 1,
+        "cantidad": 1,
+        "mensajePersonalizado": "Feliz Cumpleaños María"
+      }
+    ]
+  }'
+
+# Resultado: Pedido sin descuentos, user_id = null en BD
+```
+
+#### **Pedido de Usuario Registrado con Descuentos**
+```bash
+curl -X POST http://168.197.50.14:8080/api/pedidos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "emailUsuario": "juan@duoc.cl",  # Usuario registrado
+    "fechaEntrega": "2025-11-20T15:00:00",
+    "items": [
+      {
+        "productId": 1,
+        "cantidad": 2,
+        "mensajePersonalizado": "Tortas para la oficina"
+      }
+    ]
+  }'
+
+# Resultado: Con descuentos automáticos aplicados
 ```
 
 ### Conversión a Ventas

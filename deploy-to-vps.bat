@@ -20,9 +20,13 @@ copy docker-compose.production.yml deploy-temp\docker-compose.yml >nul
 copy .env.production deploy-temp\.env >nul
 xcopy .mvn deploy-temp\.mvn\ /s /e /i >nul
 copy mvnw.cmd deploy-temp\ >nul 2>nul
+xcopy sql deploy-temp\sql\ /s /e /i >nul
 
-REM Copiar script de despliegue corregido
-copy deploy-vps-fixed.sh deploy-temp\deploy.sh >nul
+REM Copiar scripts de despliegue y diagnóstico
+copy deploy-to-vps.sh deploy-temp\deploy.sh >nul
+copy deploy-clean.sh deploy-temp\ >nul 2>nul
+copy diagnostico.sh deploy-temp\ >nul 2>nul
+copy solucion-rapida.sh deploy-temp\ >nul 2>nul
 
 REM Crear archivo comprimido
 echo 📦 Creando paquete de despliegue...
