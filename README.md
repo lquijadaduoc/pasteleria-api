@@ -90,7 +90,7 @@ docker-compose logs -f panaderia-api
 | PI001 | Mousse de Chocolate | $5.000 | ❌ |
 | TE001 | Torta Especial de Cumpleaños | $55.000 | ✅ |
 
-## � Endpoints del API
+## 📚 Endpoints del API
 
 ### **Productos y Catálogo**
 
@@ -98,49 +98,73 @@ docker-compose logs -f panaderia-api
 # Obtener todos los productos
 GET /api/productos
 
-# Búsqueda por categoría
-GET /api/productos/categoria/TORTAS_CUADRADAS
+# Obtener producto por ID
+GET /api/productos/{id}
 
-# Filtrar por forma de torta
-GET /api/productos/forma/CIRCULAR
-
-# Productos personalizables
-GET /api/productos/personalizables
-
-# Productos sin azúcar
-GET /api/productos/sin-azucar
-
-# Búsqueda avanzada
-GET /api/productos/busqueda-avanzada?categoria=TORTAS_CIRCULARES&personalizable=true
-
-# Buscar por nombre
-GET /api/productos/buscar?q=chocolate
+# Test de conectividad
+GET /api/productos/test
 ```
 
-### **Sistema de Usuarios** (Próximamente)
+### **Sistema de Usuarios**
 
 ```bash
 # Registro de usuario
 POST /api/usuarios/registro
+# Body: { "nombre": "string", "apellido": "string", "email": "string", "password": "string", "edad": number, "esEstudianteDuoc": boolean }
 
-# Login
+# Login de usuario
 POST /api/usuarios/login
+# Body: { "email": "string", "password": "string" }
 
-# Verificar descuentos
-GET /api/usuarios/{id}/descuentos
+# Obtener usuario por email
+GET /api/usuarios/email/{email}
+
+# Obtener todos los usuarios
+GET /api/usuarios
+
+# Aplicar código de descuento
+POST /api/usuarios/{id}/aplicar-codigo
+# Body: { "codigo": "string" }
 ```
 
-### **Pedidos y Seguimiento** (Próximamente)
+### **Pedidos y Seguimiento**
 
 ```bash
-# Crear pedido
+# Crear nuevo pedido
 POST /api/pedidos
+# Body: { "usuarioId": number, "fechaEntrega": "YYYY-MM-DD", "productos": [{"productId": number, "cantidad": number, "mensaje": "string"}] }
 
-# Seguimiento de pedido
-GET /api/pedidos/{numeroPedido}/seguimiento
+# Obtener todos los pedidos
+GET /api/pedidos
 
-# Actualizar estado
+# Obtener pedido por ID
+GET /api/pedidos/{id}
+
+# Obtener pedidos por usuario
+GET /api/pedidos/usuario/{usuarioId}
+
+# Actualizar estado del pedido
 PUT /api/pedidos/{id}/estado
+# Body: { "estado": "EN_PREPARACION|LISTO|ENTREGADO" }
+```
+
+### **Ventas y Estadísticas**
+
+```bash
+# Obtener todas las ventas
+GET /api/ventas
+
+# Obtener venta por ID
+GET /api/ventas/{id}
+
+# Obtener ventas por usuario
+GET /api/ventas/usuario/{usuarioId}
+
+# Obtener estadísticas de ventas
+GET /api/ventas/estadisticas
+
+# Obtener ventas por fecha
+GET /api/ventas/fecha?inicio=YYYY-MM-DD&fin=YYYY-MM-DD
 ```
 
 ## �️ Configuración de Base de Datos
@@ -191,9 +215,32 @@ Invoke-RestMethod -Uri "http://localhost:8080/api/productos/forma/CIRCULAR" | Co
 
 ## 🚀 Despliegue en VPS
 
+### ✅ Estado Actual del Despliegue
+
+**La API está actualmente desplegada y funcionando:**
+- **URL de la API**: http://168.197.50.14:8080
+- **Estado**: ✅ Operativo
+- **Base de datos**: MySQL configurada y corriendo
+- **Última actualización**: 2025-11-11
+
+### Endpoints en Producción
+
+```bash
+# Verificar que la API está funcionando
+curl http://168.197.50.14:8080/api/productos/test
+
+# Obtener catálogo completo
+curl http://168.197.50.14:8080/api/productos
+
+# Registrar usuario
+curl -X POST http://168.197.50.14:8080/api/usuarios/registro \
+  -H "Content-Type: application/json" \
+  -d '{"nombre":"Juan","apellido":"Pérez","email":"juan@test.com","password":"123456","edad":25,"esEstudianteDuoc":false}'
+```
+
 ### Configuración de Variables de Entorno
 
-Edita el archivo `.env` con los valores de tu VPS:
+Para nuevos despliegues, edita el archivo `.env`:
 
 ```bash
 # Variables para VPS
@@ -208,37 +255,63 @@ ADMINER_PORT=8081
 
 ```bash
 # 1. Subir archivos al VPS
-scp -r . usuario@tu-vps:/ruta/panaderia-api/
+scp -r . usuario@168.197.50.14:/ruta/panaderia-api/
 
 # 2. Conectar al VPS
-ssh usuario@tu-vps
+ssh usuario@168.197.50.14
 
 # 3. Navegar al directorio
 cd /ruta/panaderia-api/
 
-# 4. Ejecutar script de despliegue
-chmod +x deploy-vps.sh
-./deploy-vps.sh
+# 4. Construir y desplegar
+docker-compose up --build -d
 ```
 
 ### Configuración de Firewall
 
 ```bash
-# Abrir puertos necesarios
-sudo ufw allow 8080/tcp  # API
+# Puertos abiertos en el VPS
+sudo ufw allow 8080/tcp  # API ✅ Configurado
 sudo ufw allow 8081/tcp  # Adminer (opcional)
-sudo ufw allow 3307/tcp  # MySQL (opcional, solo si necesitas acceso externo)
+sudo ufw allow 3307/tcp  # MySQL (opcional)
 ```
 
-## 📋 Próximas Funcionalidades
+## 🏗️ Arquitectura del Sistema
 
-- [ ] **Autenticación JWT** completa
-- [ ] **Sistema de descuentos** automático
-- [ ] **Carrito de compras** personalizado
+### **Tecnologías Implementadas**
+- **Backend**: Spring Boot 3.x con Java 17
+- **Base de Datos**: MySQL 8.0
+- **ORM**: Spring Data JPA / Hibernate
+- **Seguridad**: Spring Security (configuración personalizada)
+- **Contenedores**: Docker & Docker Compose
+- **Frontend**: React.js con Firebase Authentication
+
+### **Controladores Implementados**
+- ✅ **ProductController**: Gestión de productos y catálogo
+- ✅ **UserController**: Registro, login y gestión de usuarios
+- ✅ **PedidoController**: Creación y seguimiento de pedidos
+- ✅ **VentaController**: Registro de ventas y estadísticas
+
+### **Servicios Implementados**
+- ✅ **AuthService**: Autenticación y registro de usuarios
+- ✅ **DataInitializationService**: Población inicial de datos
+- ✅ **VentaService**: Lógica de negocio para ventas
+
+### **Características Funcionales**
+- ✅ **Sistema de descuentos** automático por edad
+- ✅ **Descuento especial** para estudiantes Duoc UC
+- ✅ **Código promocional** "FELICES50"
+- ✅ **Gestión completa de pedidos**
+- ✅ **Seguimiento de estados** de pedidos
+- ✅ **Sistema de ventas** y estadísticas
+
+## 📋 Futuras Mejoras
+
+- [ ] **Autenticación JWT** más robusta
 - [ ] **Notificaciones por email**
 - [ ] **Generación de boletas PDF**
-- [ ] **Panel de administración**
-- [ ] **Integración con redes sociales**
+- [ ] **Panel de administración web**
+- [ ] **API de pagos** integrada
 
 ## 🔧 Comandos Útiles
 
