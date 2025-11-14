@@ -2,6 +2,17 @@
 
 API REST completa para panadería con autenticación, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos.
 
+## 📑 Documentación
+
+- **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Documentación completa de todos los endpoints
+- **[README.md](README.md)** - Información general, instalación y despliegue
+
+## 🔗 Enlaces Rápidos
+
+- **API en Producción**: http://168.197.50.14:8080
+- **Repositorio**: https://github.com/lquijadaduoc/pasteleria-api
+- **Test de Conectividad**: http://168.197.50.14:8080/api/productos/test
+
 ## ✨ Características Principales
 
 ### � **Sistema de Usuarios y Descuentos**
@@ -90,82 +101,31 @@ docker-compose logs -f panaderia-api
 | PI001 | Mousse de Chocolate | $5.000 | ❌ |
 | TE001 | Torta Especial de Cumpleaños | $55.000 | ✅ |
 
-## 📚 Endpoints del API
+## 📚 API Reference
 
-### **Productos y Catálogo**
+> 📖 **Documentación Completa de Endpoints**: [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
 
-```bash
-# Obtener todos los productos
-GET /api/productos
-
-# Obtener producto por ID
-GET /api/productos/{id}
-
-# Test de conectividad
-GET /api/productos/test
-```
-
-### **Sistema de Usuarios**
+### **Endpoints Principales**
 
 ```bash
-# Registro de usuario
-POST /api/usuarios/registro
-# Body: { "nombre": "string", "apellido": "string", "email": "string", "password": "string", "edad": number, "esEstudianteDuoc": boolean }
+# Productos
+GET /api/productos                           # Catálogo completo
+GET /api/productos/test                      # Test de conectividad
 
-# Login de usuario
-POST /api/usuarios/login
-# Body: { "email": "string", "password": "string" }
+# Usuarios  
+POST /api/usuarios/registro                  # Registrar usuario
+POST /api/usuarios/login                     # Iniciar sesión
 
-# Obtener usuario por email
-GET /api/usuarios/email/{email}
+# Pedidos
+POST /api/pedidos                            # Crear pedido
+GET /api/pedidos/{numeroPedido}/seguimiento  # Seguimiento
 
-# Obtener todos los usuarios
-GET /api/usuarios
-
-# Aplicar código de descuento
-POST /api/usuarios/{id}/aplicar-codigo
-# Body: { "codigo": "string" }
+# Ventas
+GET /api/ventas/estadisticas                 # Estadísticas
+GET /api/ventas/hoy                          # Ventas del día
 ```
 
-### **Pedidos y Seguimiento**
-
-```bash
-# Crear nuevo pedido
-POST /api/pedidos
-# Body: { "usuarioId": number, "fechaEntrega": "YYYY-MM-DD", "productos": [{"productId": number, "cantidad": number, "mensaje": "string"}] }
-
-# Obtener todos los pedidos
-GET /api/pedidos
-
-# Obtener pedido por ID
-GET /api/pedidos/{id}
-
-# Obtener pedidos por usuario
-GET /api/pedidos/usuario/{usuarioId}
-
-# Actualizar estado del pedido
-PUT /api/pedidos/{id}/estado
-# Body: { "estado": "EN_PREPARACION|LISTO|ENTREGADO" }
-```
-
-### **Ventas y Estadísticas**
-
-```bash
-# Obtener todas las ventas
-GET /api/ventas
-
-# Obtener venta por ID
-GET /api/ventas/{id}
-
-# Obtener ventas por usuario
-GET /api/ventas/usuario/{usuarioId}
-
-# Obtener estadísticas de ventas
-GET /api/ventas/estadisticas
-
-# Obtener ventas por fecha
-GET /api/ventas/fecha?inicio=YYYY-MM-DD&fin=YYYY-MM-DD
-```
+**Total de endpoints disponibles**: 47+ endpoints distribuidos en 4 controladores
 
 ## �️ Configuración de Base de Datos
 
