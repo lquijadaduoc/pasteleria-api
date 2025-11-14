@@ -127,18 +127,21 @@ public class UserController {
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("count", usuarios.size());
-            response.put("usuarios", usuarios.stream().map(user -> Map.of(
-                "id", user.getId(),
-                "nombre", user.getNombre(),
-                "apellido", user.getApellido(),
-                "email", user.getEmail(),
-                "telefono", user.getTelefono() != null ? user.getTelefono() : "",
-                "fechaNacimiento", user.getFechaNacimiento(),
-                "direccion", user.getDireccion() != null ? user.getDireccion() : "",
-                "descuentoPorEdad", user.isDescuentoPorEdad(),
-                "esEstudianteDuoc", user.isEsEstudianteDuoc(),
-                "fechaRegistro", user.getFechaRegistro()
-            )).toList());
+            response.put("usuarios", usuarios.stream().map(user -> {
+                Map<String, Object> userData = new HashMap<>();
+                userData.put("id", user.getId());
+                userData.put("nombre", user.getNombre());
+                userData.put("apellido", user.getApellido());
+                userData.put("email", user.getEmail());
+                userData.put("telefono", user.getTelefono() != null ? user.getTelefono() : "");
+                userData.put("fechaNacimiento", user.getFechaNacimiento());
+                userData.put("direccion", user.getDireccion() != null ? user.getDireccion() : "");
+                userData.put("rol", user.getRol().toString());
+                userData.put("descuentoPorEdad", user.isDescuentoPorEdad());
+                userData.put("esEstudianteDuoc", user.isEsEstudianteDuoc());
+                userData.put("fechaRegistro", user.getFechaRegistro());
+                return userData;
+            }).toList());
             
             return ResponseEntity.ok(response);
             
@@ -150,6 +153,91 @@ public class UserController {
         }
     }
 
+    /**
+     * Cambiar rol de usuario (solo para administradores)
+     * PUT /api/usuarios/{id}/rol
+     */
+    @PutMapping("/{id}/rol")
+    public ResponseEntity<?> cambiarRolUsuario(@PathVariable Long id, @RequestBody Map<String, String> datos) {
+        try {
+            String nuevoRol = datos.get("rol");
+            
+            if (nuevoRol == null || nuevoRol.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "El rol es obligatorio"
+                ));
+            }
+            
+            // Validar que el rol sea válido
+            try {
+                User.RolUsuario.valueOf(nuevoRol.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "Rol inválido. Roles válidos: CLIENTE, ADMIN, EMPLEADO"
+                ));
+            }
+            
+            User usuario = authService.cambiarRolUsuario(id, nuevoRol);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Rol actualizado exitosamente");
+            response.put("usuario", Map.of(
+                "id", usuario.getId(),
+                "nombre", usuario.getNombre(),
+                "email", usuario.getEmail(),
+                "rol", usuario.getRol().toString()
+            ));
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "message", "Error al cambiar rol: " + e.getMessage()
+            ));
+        }
+    }
+
+    /**
+     * Obtener usuario por ID
+     * GET /api/usuarios/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerUsuario(@PathVariable Long id) {
+        try {
+            User usuario = authService.obtenerUsuarioPorId(id);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            
+            Map<String, Object> usuarioData = new HashMap<>();
+            usuarioData.put("id", usuario.getId());
+            usuarioData.put("nombre", usuario.getNombre());
+            usuarioData.put("apellido", usuario.getApellido());
+            usuarioData.put("email", usuario.getEmail());
+            usuarioData.put("telefono", usuario.getTelefono() != null ? usuario.getTelefono() : "");
+            usuarioData.put("fechaNacimiento", usuario.getFechaNacimiento());
+            usuarioData.put("direccion", usuario.getDireccion() != null ? usuario.getDireccion() : "");
+            usuarioData.put("rol", usuario.getRol().toString());
+            usuarioData.put("descuentoPorEdad", usuario.isDescuentoPorEdad());
+            usuarioData.put("esEstudianteDuoc", usuario.isEsEstudianteDuoc());
+            usuarioData.put("fechaRegistro", usuario.getFechaRegistro());
+            
+            response.put("usuario", usuarioData);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(Map.of(
+                "success", false,
+                "message", "Usuario no encontrado: " + e.getMessage()
+            ));
+        }
+    }
+
     @GetMapping("/test")
     public ResponseEntity<?> test() {
         Map<String, Object> response = new HashMap<>();
@@ -157,8 +245,10 @@ public class UserController {
         response.put("message", "Sistema de usuarios funcionando correctamente");
         response.put("endpoints", Map.of(
             "listar", "GET /api/usuarios",
+            "obtener", "GET /api/usuarios/{id}",
             "registro", "POST /api/usuarios/registro",
             "login", "POST /api/usuarios/login",
+            "cambiarRol", "PUT /api/usuarios/{id}/rol",
             "codigoDescuento", "POST /api/usuarios/{email}/codigo-descuento",
             "descuentos", "GET /api/usuarios/{email}/descuentos"
         ));

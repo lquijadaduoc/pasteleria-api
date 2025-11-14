@@ -1,27 +1,24 @@
 # 🍰 Panadería API - Sistema Completo de Gestión
 
-API REST completa para panadería con autenticación, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos. **Actualizado con soporte para pedidos anónimos y herramientas de diagnóstico automático.**
+API REST completa para panadería con autenticación JWT, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos. Incluye soporte para pedidos anónimos y gestión de roles en tiempo real.
 
 ## 📑 Documentación
 
 - **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Documentación completa de todos los endpoints
-- **[GUIA_DESPLIEGUE.md](GUIA_DESPLIEGUE.md)** - Guía completa de despliegue y preservación de datos
-- **[CORRECCION_USER_ID.md](CORRECCION_USER_ID.md)** - Corrección del error user_id NULL
 
-## 🔗 Enlaces Rápidos
+## 🔗 Enlaces de Producción
 
-- **API en Producción**: http://168.197.50.14:8080
-- **Repositorio**: https://github.com/lquijadaduoc/pasteleria-api
+- **API Base**: http://168.197.50.14:8080
 - **Test de Conectividad**: http://168.197.50.14:8080/api/productos/test
-- **Productos Disponibles**: http://168.197.50.14:8080/api/productos
+- **Catálogo de Productos**: http://168.197.50.14:8080/api/productos
 
-## 🆕 Últimas Actualizaciones (Noviembre 2025)
+## 🆕 Funcionalidades Implementadas
 
-- ✅ **Pedidos Anónimos**: Soporte completo para pedidos sin usuario registrado
-- ✅ **Preservación de Datos**: Despliegues que no eliminan datos existentes  
-- ✅ **Diagnóstico Automático**: Scripts inteligentes para resolver problemas
-- ✅ **Base de Datos Robusta**: DDL completo con datos iniciales
-- ✅ **Healthcheck Mejorado**: Mejor detección de problemas de arranque
+- ✅ **Pedidos Anónimos**: Soporte completo para pedidos sin registro de usuario
+- ✅ **Gestión de Roles**: Cambio dinámico de roles (CLIENTE/ADMIN/EMPLEADO)
+- ✅ **Dual Sales Flow**: Ventas directas + conversión pedido→venta
+- ✅ **Autenticación JWT**: Sistema completo de tokens con refresh
+- ✅ **Generación PDF**: Boletas y reportes automáticos
 
 ## ✨ Características Principales
 

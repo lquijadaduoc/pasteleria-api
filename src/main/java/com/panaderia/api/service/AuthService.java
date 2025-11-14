@@ -134,4 +134,30 @@ public class AuthService {
     public java.util.List<User> obtenerTodosLosUsuarios() {
         return userRepository.findAll();
     }
+    
+    /**
+     * Obtener usuario por ID
+     */
+    public User obtenerUsuarioPorId(Long id) throws Exception {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (!userOpt.isPresent()) {
+            throw new Exception("Usuario no encontrado con ID: " + id);
+        }
+        return userOpt.get();
+    }
+    
+    /**
+     * Cambiar rol de usuario
+     */
+    public User cambiarRolUsuario(Long id, String nuevoRol) throws Exception {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (!userOpt.isPresent()) {
+            throw new Exception("Usuario no encontrado con ID: " + id);
+        }
+        
+        User usuario = userOpt.get();
+        usuario.setRol(User.RolUsuario.valueOf(nuevoRol.toUpperCase()));
+        
+        return userRepository.save(usuario);
+    }
 }

@@ -1,20 +1,19 @@
-# 📚 Documentación Completa de la API - Panadería
+# 📚 API Documentation - Panadería System
 
-Esta documentación contiene TODOS los endpoints implementados en la API de la panadería, organizados por controlador.
+Documentación completa de la API REST para sistema de panadería con autenticación JWT, gestión de pedidos anónimos y dual sales flow.
 
-**🆕 Última actualización:** Noviembre 14, 2025 - Incluye soporte para pedidos anónimos y correcciones de estabilidad.
+**Versión:** 1.0.0 | **Fecha:** Noviembre 2025
 
 ## 🏗️ Base URL
-- **Desarrollo Local**: `http://localhost:8080`
-- **Producción (VPS)**: `http://168.197.50.14:8080` ✅ **Operativo**
+- **Producción**: `http://168.197.50.14:8080` ✅ **Operativo**
 
-## 🎯 Características Destacadas
+## 🎯 Características Principales
 
-- ✅ **Pedidos Anónimos**: Crear pedidos sin necesidad de registro
-- ✅ **Descuentos Automáticos**: Para usuarios registrados (50+ años, código FELICES50)
-- ✅ **Tortas Gratis**: Para estudiantes Duoc (@duoc.cl) en cumpleaños
-- ✅ **Catálogo Completo**: 16+ productos con personalización
-- ✅ **Sistema Robusto**: Con diagnóstico automático y preservación de datos
+- ✅ **Pedidos Anónimos**: Sistema dual para usuarios registrados y anónimos
+- ✅ **Gestión de Roles**: Administración dinámica (CLIENTE/ADMIN/EMPLEADO)  
+- ✅ **Dual Sales Flow**: Ventas directas + conversión pedido→venta
+- ✅ **Autenticación JWT**: Tokens con refresh automático
+- ✅ **Catálogo Completo**: 16+ productos con personalización avanzada
 
 ---
 

@@ -15,7 +15,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     
     Optional<Pedido> findByNumeroPedido(String numeroPedido);
     
-    @Query("SELECT p FROM Pedido p WHERE p.usuario.email = ?1 ORDER BY p.fechaPedido DESC")
+    @Query("SELECT p FROM Pedido p LEFT JOIN p.usuario u WHERE p.emailUsuario = ?1 OR u.email = ?1 ORDER BY p.fechaPedido DESC")
     List<Pedido> findByEmailUsuarioOrderByFechaCreacionDesc(String emailUsuario);
     
     List<Pedido> findByEstado(String estado);
@@ -26,7 +26,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     @Query("SELECT p FROM Pedido p WHERE p.estado = ?1 AND p.fechaEntregaSolicitada <= ?2")
     List<Pedido> findPedidosParaNotificar(String estado, LocalDate fecha);
     
-    @Query("SELECT COUNT(p) FROM Pedido p WHERE p.usuario.email = ?1")
+    @Query("SELECT COUNT(p) FROM Pedido p LEFT JOIN p.usuario u WHERE p.emailUsuario = ?1 OR u.email = ?1")
     Long countPedidosByUsuario(String emailUsuario);
     
     @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.usuario.email = ?1 AND p.estado != 'CANCELADO'")

@@ -27,6 +27,9 @@ public class Pedido {
     @JoinColumn(name = "user_id", nullable = true)
     private User usuario;
     
+    @Column(name = "email_usuario", length = 150)
+    private String emailUsuario;
+    
     @Column(name = "fecha_pedido", nullable = false)
     private LocalDateTime fechaPedido;
     
@@ -227,8 +230,14 @@ public class Pedido {
     public void setItems(List<PedidoItem> items) { this.items = items; }
     
     // Métodos de conveniencia para compatibilidad
-    public String getEmailUsuario() { return usuario != null ? usuario.getEmail() : null; }
-    public void setEmailUsuario(String emailUsuario) { /* Este campo se maneja a través de la relación User */ }
+    public String getEmailUsuario() { 
+        // Priorizar el email almacenado directamente, si no existe, obtener del usuario
+        return emailUsuario != null ? emailUsuario : (usuario != null ? usuario.getEmail() : null);
+    }
+    
+    public void setEmailUsuario(String emailUsuario) { 
+        this.emailUsuario = emailUsuario;
+    }
     
     public LocalDateTime getFechaCreacion() { return fechaPedido; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaPedido = fechaCreacion; }

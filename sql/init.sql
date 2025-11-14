@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     numero_pedido VARCHAR(20) NOT NULL UNIQUE,
     user_id BIGINT NULL, -- PERMITIR NULL para pedidos sin usuario registrado
-    email_usuario VARCHAR(150),
+    email_usuario VARCHAR(150), -- Email del cliente (registrado o no)
     fecha_pedido DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_entrega_solicitada DATE,
     fecha_entrega_real DATETIME,

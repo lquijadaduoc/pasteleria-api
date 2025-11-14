@@ -45,6 +45,9 @@ services:
     restart: unless-stopped
     environment:
       SPRING_PROFILES_ACTIVE: production
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/panaderia_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Santiago
+      SPRING_DATASOURCE_USERNAME: panaderia_user
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-PanaderiaUser2024!}
       DB_USERNAME: panaderia_user
       DB_PASSWORD: ${MYSQL_PASSWORD:-PanaderiaUser2024!}
       ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}"
