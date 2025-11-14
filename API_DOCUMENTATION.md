@@ -170,20 +170,42 @@ GET /api/usuarios/test
 ## 📦 PedidoController - `/api/pedidos`
 
 ### Gestión de Pedidos
+
+> ℹ️ **Importante**: Los pedidos NO requieren que el usuario esté registrado en el sistema.
+> - Si el email corresponde a un usuario registrado, se aplicarán descuentos y beneficios automáticamente
+> - Si el email NO está registrado, el pedido se creará igualmente sin descuentos especiales
+
 ```http
 POST /api/pedidos
-# Crear nuevo pedido
+# Crear nuevo pedido (usuario registrado o no)
 Content-Type: application/json
 {
-  "usuarioEmail": "string",
-  "fechaEntrega": "YYYY-MM-DD",
-  "productos": [
+  "emailUsuario": "string",          # Email del cliente (registrado o no)
+  "fechaEntrega": "2025-11-20T10:00:00",  # Formato ISO DateTime (opcional)
+  "observaciones": "string",         # Notas adicionales (opcional)
+  "items": [
     {
-      "productId": number,
-      "cantidad": number,
-      "mensaje": "string"
+      "productId": number,           # ID del producto
+      "cantidad": number,            # Cantidad solicitada
+      "mensajePersonalizado": "string"  # Mensaje para tortas (opcional)
     }
   ]
+}
+
+# Respuesta exitosa:
+{
+  "success": true,
+  "message": "Pedido creado exitosamente",
+  "pedido": {
+    "id": number,
+    "numeroPedido": "PAN-1234567890",
+    "estado": "RECIBIDO",
+    "subtotal": number,
+    "descuento": number,           # 0 si no es usuario registrado
+    "total": number,
+    "fechaCreacion": "2025-11-14T...",
+    "fechaEntrega": "2025-11-20T..."
+  }
 }
 
 GET /api/pedidos
@@ -224,21 +246,45 @@ GET /api/pedidos/test
 ## 💰 VentaController - `/api/ventas`
 
 ### Gestión de Ventas
+
+> ℹ️ **Importante**: Las ventas NO requieren que el usuario esté registrado en el sistema.
+> - Si el email corresponde a un usuario registrado, se aplicarán descuentos automáticamente
+> - Si el email NO está registrado, la venta se procesará sin descuentos especiales
+
 ```http
 POST /api/ventas
-# Registrar nueva venta
+# Registrar nueva venta (usuario registrado o no)
 Content-Type: application/json
 {
-  "usuarioId": number,
-  "productos": [
+  "emailCliente": "string",          # Email del cliente (opcional)
+  "nombreCliente": "string",         # Nombre del cliente
+  "metodoPago": "EFECTIVO|TARJETA_CREDITO|TARJETA_DEBITO|TRANSFERENCIA",
+  "observaciones": "string",         # Notas adicionales (opcional)
+  "items": [
     {
-      "productId": number,
-      "cantidad": number,
-      "precioUnitario": number
+      "productId": number,           # ID del producto
+      "cantidad": number,            # Cantidad vendida
+      "mensajePersonalizado": "string"  # Mensaje personalizado (opcional)
     }
-  ],
-  "metodoPago": "string",
-  "descuentoAplicado": number
+  ]
+}
+
+# Respuesta exitosa:
+{
+  "success": true,
+  "message": "Venta registrada exitosamente",
+  "venta": {
+    "id": number,
+    "numeroVenta": "V20251114...",
+    "fechaVenta": "2025-11-14T...",
+    "nombreCliente": "string",
+    "emailCliente": "string",
+    "subtotal": number,
+    "descuento": number,             # 0 si no es usuario registrado
+    "total": number,
+    "metodoPago": "string",
+    "estado": "COMPLETADA"
+  }
 }
 
 GET /api/ventas
