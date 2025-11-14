@@ -28,10 +28,12 @@ API REST completa para panadería con autenticación, catálogo extenso, sistema
 - **16 productos predefinidos** según especificaciones
 
 ### 📦 **Gestión de Pedidos**
+- **Pedidos sin registro**: Permite crear pedidos sin necesidad de que el usuario esté registrado
 - Seguimiento completo desde preparación hasta entrega
 - Generación automática de boletas
 - Notificaciones de estado
 - Selección de fechas de entrega
+- Descuentos y beneficios automáticos solo para usuarios registrados
 
 ## 🚀 Inicio Rápido
 
@@ -261,9 +263,10 @@ sudo ufw allow 3307/tcp  # MySQL (opcional)
 - ✅ **Sistema de descuentos** automático por edad
 - ✅ **Descuento especial** para estudiantes Duoc UC
 - ✅ **Código promocional** "FELICES50"
-- ✅ **Gestión completa de pedidos**
+- ✅ **Gestión completa de pedidos** (con o sin usuario registrado)
 - ✅ **Seguimiento de estados** de pedidos
 - ✅ **Sistema de ventas** y estadísticas
+- ✅ **Pedidos y ventas sin registro**: Los clientes no necesitan estar registrados para realizar compras
 
 ## 📋 Futuras Mejoras
 

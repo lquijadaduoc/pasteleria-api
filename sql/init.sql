@@ -21,6 +21,10 @@ ALTER TABLE productos
 ADD COLUMN IF NOT EXISTS stock INT DEFAULT 0 NOT NULL,
 ADD COLUMN IF NOT EXISTS stock_minimo INT DEFAULT 5;
 
+-- Modificar tabla de pedidos para permitir pedidos sin usuario registrado
+ALTER TABLE pedidos 
+MODIFY COLUMN user_id BIGINT NULL;
+
 -- Crear tabla de ventas
 CREATE TABLE IF NOT EXISTS ventas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,

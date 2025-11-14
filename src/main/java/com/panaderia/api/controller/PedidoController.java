@@ -46,19 +46,14 @@ public class PedidoController {
             String observaciones = (String) request.get("observaciones");
             List<Map<String, Object>> items = (List<Map<String, Object>>) request.get("items");
 
-            // Buscar usuario
+            // Buscar usuario (opcional - puede existir o no)
             Optional<com.panaderia.api.entity.User> usuarioOpt = userRepository.findByEmail(emailUsuario);
-            if (!usuarioOpt.isPresent()) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("success", false);
-                response.put("message", "Usuario no encontrado con email: " + emailUsuario);
-                return ResponseEntity.badRequest().body(response);
-            }
             
             // Crear pedido
             Pedido pedido = new Pedido();
             pedido.setEmailUsuario(emailUsuario);
-            pedido.setUsuario(usuarioOpt.get());
+            // Solo asignar usuario si existe en la base de datos
+            usuarioOpt.ifPresent(pedido::setUsuario);
             pedido.setNumeroPedido(generarNumeroPedido());
             pedido.setFechaCreacion(LocalDateTime.now());
             
@@ -99,13 +94,16 @@ public class PedidoController {
                 subtotal = subtotal.add(item.getSubtotal() != null ? item.getSubtotal() : java.math.BigDecimal.ZERO);
             }
 
-            // Aplicar descuentos (usar BigDecimal)
-            double descuentoPorcentaje = authService.calcularDescuentoTotal(emailUsuario);
+            // Aplicar descuentos solo si el usuario existe (usar BigDecimal)
+            double descuentoPorcentaje = 0;
+            if (usuarioOpt.isPresent()) {
+                descuentoPorcentaje = authService.calcularDescuentoTotal(emailUsuario);
+            }
             java.math.BigDecimal descuentoMonto = subtotal.multiply(java.math.BigDecimal.valueOf(descuentoPorcentaje)).divide(java.math.BigDecimal.valueOf(100));
             java.math.BigDecimal total = subtotal.subtract(descuentoMonto);
 
-            // Verificar torta gratis para estudiantes Duoc
-            boolean tortaGratis = authService.puedeAccederTortaGratis(emailUsuario);
+            // Verificar torta gratis para estudiantes Duoc solo si el usuario existe
+            boolean tortaGratis = usuarioOpt.isPresent() && authService.puedeAccederTortaGratis(emailUsuario);
             if (tortaGratis) {
                 // Buscar la torta más cara y hacerla gratis
                 Optional<PedidoItem> tortaMasCara = pedidoItems.stream()

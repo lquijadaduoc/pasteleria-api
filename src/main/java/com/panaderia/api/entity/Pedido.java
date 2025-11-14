@@ -24,7 +24,7 @@ public class Pedido {
     private String numeroPedido;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User usuario;
     
     @Column(name = "fecha_pedido", nullable = false)
