@@ -1,6 +1,5 @@
-# 📚 API Documentation - Panadería System
-
-Documentación completa de la API REST para sistema de panadería con autenticación JWT, gestión de pedidos anónimos y dual sales flow.
+# 📚 Documentación Completa de la API de PASTELERIA 1000 SABORES
+Documentación completa de la API REST para PASTELERIA 1000 SABORES con autenticación JWT, gestión de pedidos anónimos y dual sales flow.
 
 **Versión:** 1.0.0 | **Fecha:** Noviembre 2025
 
@@ -464,4 +463,5 @@ curl http://168.197.50.14:8080/api/ventas/estadisticas
 
 **📅 Última actualización**: 14 de noviembre de 2025  
 **🔗 Repositorio**: https://github.com/lquijadaduoc/pasteleria-api  
-**🌐 API en Producción**: http://168.197.50.14:8080
+**🌐 API en Producción**: http://168.197.50.14:8080  
+**👥 Desarrolladores**: Luis Quijada Muñoz - David Santibañez Roca

@@ -1,12 +1,16 @@
-# 🍰 Panadería API - Sistema Completo de Gestión
+# 🍰 API de PASTELERIA 1000 SABORES - Sistema Completo de Gestión
 
-API REST completa para panadería con autenticación JWT, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos. Incluye soporte para pedidos anónimos y gestión de roles en tiempo real.
+API REST completa para PASTELERIA 1000 SABORES con autenticación JWT, catálogo extenso, sistema de descuentos especiales y seguimiento de pedidos. Incluye soporte para pedidos anónimos y gestión de roles en tiempo real.
 
 ## 📑 Documentación
 
 - **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Documentación completa de todos los endpoints
+- **[API_INTEGRATION.md](API_INTEGRATION.md)** - Cómo consumir la API desde apps externas
+- **[README.md](README.md)** - Información general, instalación y despliegue
 
-## 🔗 Enlaces de Producción
+**Desarrolladores**: Luis Quijada Muñoz - David Santibañez Roca
+
+## 🔗 Enlaces Rápidos
 
 - **API Base**: http://168.197.50.14:8080
 - **Test de Conectividad**: http://168.197.50.14:8080/api/productos/test
